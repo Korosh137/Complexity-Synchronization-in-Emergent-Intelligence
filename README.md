@@ -1,1 +1,11 @@
 # Complexity-Synchronization-in-Emergent-Intelligence
+
+The codes generate the results for the paper "Complexity Synchronization in Emergent Intelligence."
+
+1- Run EI_1.m for each NS=NF=10, 15, ...50. The parameters are set to those used in the paper.
+2- Run EIcombinedata_2 to create a single matrix containing the data for all NS values.
+3- Open the function MDEA in the same directory and Run EI_MDEA_3. This code creates the scaling time series and the cross-correlations between them based on the two selected time series for its input 'data'.
+4- Run EI_OrdinaryCorrelation_4 to evaluate the cross-correlation between the time series selected in input 'data'.
+5- Run EI_Averages_5 to evaluate the averages of the payoffs.
+6- Run RenewalTest_6 for the renewal experiment. The length of the time series for this experiment should be long. Run the EI_1.m code for NS= 20 and Trials= 1e7. You only need one time series, so set k5 = 1 : 1.
+7- Run EI_Animation_7 to create the corresponding animation.
