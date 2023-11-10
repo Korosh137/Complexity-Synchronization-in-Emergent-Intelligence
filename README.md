@@ -1,6 +1,6 @@
 # Complexity-Synchronization-in-Emergent-Intelligence
 
-The codes generate the results for the paper "Complexity Synchronization in Emergent Intelligence."
+The codes generate the data for the paper "Complexity Synchronization in Emergent Intelligence."
 
 1- Run EI_1.m for each NS=NF=10, 15, ...50. The parameters are set to those used in the paper.
 2- Run EIcombinedata_2 to create a single matrix containing the data for all NS values.
