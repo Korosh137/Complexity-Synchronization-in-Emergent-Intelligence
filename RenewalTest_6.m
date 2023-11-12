@@ -7,7 +7,7 @@ ta = 100 ; % length of the age
 SmaLen = 10000 ;
 StripeSize = 0.01 ;
                     % For renewal experiment we need long time series. So, we ran the EI.m code with Trials = 1e7 and for NS = 20.
-                            Data = DATA9x(1:1e7, 1)  ; 
+                            Data = DATA9x(1:1e6, 1)  ; 
 Len = length(Data) ;
 P1 = zeros(Len, 1) ;
 P1Age = zeros(Len, 1) ;
@@ -189,77 +189,17 @@ for  ii = 1 : 10000
 end
 
 % P1
-for y = 1 : Len
-    P1(y) = P1(y)/1 ;
-end
-
-Sum = 0 ;
-for o = 1: Len
-    Sum = Sum + P1(o) ;
-end
-
-for zz = 1: SmaLen
-    P1(zz) = P1(zz)/ Sum ;
-end
-
-SmaLenP1 = zeros(SmaLen - 1, 1);
-for o = 1: SmaLen
-    SmaLenP1(o) = P1(o);
-end
-
+ gg = (cumsum(P1));
+  P1=P1/gg(Len') ;
 % P1Age
-for y = 1 : Len
-    P1Age(y) = P1Age(y)/1 ;
-end
-
-Sum = 0 ;
-for o = 1: Len
-    Sum = Sum + P1Age(o) ;
-end
-
-for zz = 1: SmaLen
-    P1Age(zz) = P1Age(zz)/ Sum ;
-end
-
-SmaLenP1Age = zeros(SmaLen - 1, 1);
-
-for o = 1: SmaLen
-    SmaLenP1Age(o) = P1Age(o);
-end
-
+ gg = (cumsum(P1Age));
+  P1Age=P1Age/gg(Len') ;
 % P1SH
-for y = 1 : Len
-    P1SH(y) = P1SH(y)/1 ;
-end
-
-Sum = 0 ;
-for o = 1: Len
-    Sum = Sum + P1SH(o) ;
-end
-
-for zz = 1: SmaLen
-    P1SH(zz) = P1SH(zz)/ Sum ;
-end
-
-SmaLenP1SH = zeros(SmaLen - 1, 1);
-
-for o = 1: SmaLen
-    SmaLenP1SH(o) = P1SH(o);
-end
-
+ gg = (cumsum(P1SH));
+  P1SH=P1SH/gg(Len') ;
 % P1SHAge
-for y = 1 : Len
-    P1SHAge(y) = P1SHAge(y)/1 ;
-end
-
-Sum = 0 ;
-for o = 1: Len
-    Sum = Sum + P1SHAge(o) ;
-end
-
-for zz = 1: SmaLen
-    P1SHAge(zz) = P1SHAge(zz)/ Sum ;
-end
+ gg = (cumsum(P1SHAge));
+  P1SHAge=P1SHAge/gg(Len') ;
 
 
 A11 = P1(1:1e5, 1) ;
