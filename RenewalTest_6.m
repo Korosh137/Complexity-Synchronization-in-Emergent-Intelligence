@@ -1,188 +1,189 @@
 tic
 
-% This code test thether the extracted events, using stripes, are renewal or not (renewal experiment).
+% This code tests whether or not the extracted events from a signal (using stripes) are renewal (renewal experiment).
+% Korosh Mahmoodi Nov. 2023
+% Using this code cite:
 
 
 ta = 100 ; % length of the age
-SmaLen = 10000 ;
-StripeSize = 0.01 ;
-                    % For renewal experiment we need long time series. So, we ran the EI.m code with Trials = 1e7 and for NS = 20.
-                            Data = DATA9x(1:1e6, 1)  ; 
-Len = length(Data) ;
-P1 = zeros(Len, 1) ;
-P1Age = zeros(Len, 1) ;
-P1SH = zeros(Len, 1) ;
-P1SHAge = zeros(Len, 1) ;
-DicatomX2 = zeros(Len, 1) ;
-DPhiY1 = zeros(Len,1) ;
-DPhiYn1 = zeros(Len,1) ;
+StripeSize = 0.01 ; % Size of the stripes for extracting events from the signal (Data)
 
-% FINDING tavs
-tav1 = zeros(Len,1);
+                    % For renewal experiment we need long time series. So, we ran the EI.m code with Trials = 1e7 (NS = 20.)
+                            Data = DATA9x(1:1e7, 1)  ; % input data
+Len = length(Data) ;
+
+% Waiting-time probability density function of the:
+P1 = zeros(Len, 1) ; %  events
+P1Age = zeros(Len, 1) ; % aged events
+P1SH = zeros(Len, 1) ; % shuffled events
+P1SHAge = zeros(Len, 1) ; % shuffled-aged events
+
+
+% Extracting the waiting-times (Tau) using stripes
+Tau = zeros(Len,1);
 
 Data = Data - min(Data) ;
 Data = Data ./ max(Data) ;
 RoundedData = round(Data./StripeSize, 0); 
-Tau = zeros(1,Len) ;
+Ta = zeros(1,Len) ;
 k = 1 ;
-Tau(1) = 1 ;
+Ta(1) = 1 ;
 
 for i = 2 : Len
     if RoundedData(i) == RoundedData(i-1)
-        Tau(k) = Tau(k) + 1 ;
+        Ta(k) = Ta(k) + 1 ;
     else
         k = k + 1 ;
-        Tau(k) = 1 ;
+        Ta(k) = 1 ;
     end
 end
 
 % sums the Taus
-Tau = Tau(1:k) ;
-tav1 = Tau ;
+Ta = Ta(1:k) ;
+Tau = Ta ;
                                                 % RENEWAL EXPERIMENT
 
-% Aging  tav1
-Ltav1 = zeros(k, 1);
+% Aging  Taus
+LTau = zeros(k, 1);
 
-Ltav1(1) = tav1(1) ;
+LTau(1) = Tau(1) ;
 
 for uuu = 2 : k
-    Ltav1(uuu) = Ltav1(uuu-1) + tav1(uuu) ;
+    LTau(uuu) = LTau(uuu-1) + Tau(uuu) ;
 end
 
-tav1Age = zeros( 10 * k , 1) ;
+TauAge = zeros( 10 * k , 1) ;
 
-% After first event
 c1Age = 0 ;
 XX = 1  ;
 while XX  >= 0
     c1Age = c1Age + 1 ;
-    tav1Age(c1Age) = tav1(c1Age) - ta ;
+    TauAge(c1Age) = Tau(c1Age) - ta ;
 
-    if tav1Age(c1Age) <= 0
+    if TauAge(c1Age) <= 0
 
-        AAA = tav1(c1Age) ;
+        AAA = Tau(c1Age) ;
         hhh = c1Age ;
-        while tav1Age(c1Age) <= 0
+        while TauAge(c1Age) <= 0
             hhh = hhh + 1 ;
-            AAA = AAA + tav1(hhh) ;
+            AAA = AAA + Tau(hhh) ;
 
-            tav1Age(c1Age) = AAA - ta ;
+            TauAge(c1Age) = AAA - ta ;
 
-            XX = Ltav1( k ) - (Ltav1(hhh) + ta ) ;
+            XX = LTau( k ) - (LTau(hhh) + ta ) ;
             if  XX < 0
-                tav1Age(c1Age) = 0 ;
+                TauAge(c1Age) = 0 ;
                 break
             end
         end
 
-        XX = Ltav1( k ) - (Ltav1(c1Age) + ta ) ;
+        XX = LTau( k ) - (LTau(c1Age) + ta ) ;
 
         if  XX < 0
-            tav1Age(c1Age) = 0 ;
+            TauAge(c1Age) = 0 ;
             break
         end
 
     end
-    XX = Ltav1(k ) - (Ltav1(c1Age) + ta ) ;
+    XX = LTau(k ) - (LTau(c1Age) + ta ) ;
 end
 
-% Shuffle of  tav1 s
+% Shuffling the  Taus
 SH1 = k ;
-tav1SH = zeros(k ,1);    
+TauSH = zeros(k ,1);    
 
 for ttt = 1 : Len
 
     r1 = round((SH1 - 1)*rand + 1) ;  
     r2 = round((SH1 - 1)*rand + 1) ;
 
-    AA = tav1(r1) ;
-    BB = tav1(r2) ;
+    AA = Tau(r1) ;
+    BB = Tau(r2) ;
 
-    tav1SH(r1) = BB ;
-    tav1SH(r2) = AA ;
+    TauSH(r1) = BB ;
+    TauSH(r2) = AA ;
 
 end
 
-% Aging the shuffled tav1 s
+% Aging the shuffled Tau s
 
 % Lenths
-Ltav1SH = zeros( k, 1) ;
-Ltav1SH(1) = tav1SH(1) ;
+LTauSH = zeros( k, 1) ;
+LTauSH(1) = TauSH(1) ;
 
 for u1 = 2 :1:k
-    Ltav1SH(u1) = Ltav1SH(u1-1) + tav1SH(u1) ;
+    LTauSH(u1) = LTauSH(u1-1) + TauSH(u1) ;
 end
 
 
-tav1SHAge = zeros( 10*k , 1) ;
+TauSHAge = zeros( 10*k , 1) ;
 
 c1SHAge = 0 ;
-XX = Ltav1SH( k ) - ta  ;
+XX = LTauSH( k ) - ta  ;
 
 while XX  >= 0
 
     c1SHAge = c1SHAge + 1 ;
-    tav1SHAge(c1SHAge) = tav1SH(c1SHAge) - ta ;
+    TauSHAge(c1SHAge) = TauSH(c1SHAge) - ta ;
 
-    if tav1SHAge(c1SHAge) <= 0
+    if TauSHAge(c1SHAge) <= 0
 
-        AAA = tav1SH(c1SHAge) ;
+        AAA = TauSH(c1SHAge) ;
         hhh = c1SHAge ;
-        while tav1SHAge(c1SHAge) <= 0
+        while TauSHAge(c1SHAge) <= 0
             hhh = hhh + 1 ;
-            AAA = AAA + tav1SH(hhh) ;
+            AAA = AAA + TauSH(hhh) ;
 
-            tav1SHAge(c1SHAge) = AAA - ta ;
+            TauSHAge(c1SHAge) = AAA - ta ;
 
-            XX = Ltav1SH( k ) - (Ltav1SH(hhh) + ta ) ;
+            XX = LTauSH( k ) - (LTauSH(hhh) + ta ) ;
             if  XX < 0
-                tav1SHAge(c1SHAge) = 0 ;
+                TauSHAge(c1SHAge) = 0 ;
                 break
             end
         end
 
-        XX = Ltav1SH( k ) - (Ltav1SH(c1SHAge) + ta ) ;
+        XX = LTauSH( k ) - (LTauSH(c1SHAge) + ta ) ;
         if  XX < 0
-            tav1SHAge(c1SHAge) = 0 ;
+            TauSHAge(c1SHAge) = 0 ;
             break
         end
     end
-    XX = Ltav1SH( k ) - (Ltav1SH(c1SHAge) + ta ) ;
+    XX = LTauSH( k ) - (LTauSH(c1SHAge) + ta ) ;
 end
 
 % Histograms
-%  tav1
+%  Tau
 for  ii = 1 : 10000
     for  jj = 1 : k
-        if tav1(jj) == ii
+        if Tau(jj) == ii
             P1(ii) = P1(ii) + 1;
         end
     end
 end
 
-%  tav1 Age
+%  Tau Age
 for  ii = 1 : 10000
     for  jj = 1 : c1Age
-        if tav1Age(jj) == ii
+        if TauAge(jj) == ii
             P1Age(ii) = P1Age(ii) + 1;
         end
     end
 end
 
-%  tav1SH
+%  TauSH
 for  ii = 1 : 10000
     for  jj = 1 : k
-        if tav1SH(jj) == ii
+        if TauSH(jj) == ii
             P1SH(ii) = P1SH(ii) + 1;
         end
     end
 end
 
-%  tav1SHAge
+%  TauSHAge
 for  ii = 1 : 10000
     for  jj = 1 : c1SHAge
-        if tav1SHAge(jj) == ii
+        if TauSHAge(jj) == ii
             P1SHAge(ii) = P1SHAge(ii) + 1;
         end
     end
@@ -207,6 +208,6 @@ A22 = P1Age(1:1e5, 1) ;
 A33 = P1SHAge(1:1e5, 1) ;
 loglog(A11,'DisplayName','\psi(\tau)');hold on; loglog(A22,'DisplayName','Aged \psi(\tau)');hold on; loglog(A33,'DisplayName','Shuffled-Aged \psi(\tau)');hold off
 xlabel('log(\tau)'), ylabel('log\psi(\tau)');
-
+legend;
 
 toc
