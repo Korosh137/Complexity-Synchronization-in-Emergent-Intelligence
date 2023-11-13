@@ -17,5 +17,5 @@ meanPayMatrixS = mean(PAYmatixS') ;
 summmm = meanPayMatrixF + meanPayMatrixS ;
 
 SUMMAtPay = PAYmatixF + PAYmatixS ;
-
+plot(SUMMAtPay)
 
