@@ -1,4 +1,4 @@
-To generate data:
+To generate data and analyze it:
 1- Run EI_1.m for each NS=NF=10, 15, ...50. The parameters are set to those used in the paper.
 2- Run EIcombinedata_2 to create a single matrix containing the data for all NS values.
 3- Open the function MDEA in the same directory and Run EI_MDEA_3. This code creates the scaling time series and the cross-correlations between them based on the two selected time series for its input 'data'.
