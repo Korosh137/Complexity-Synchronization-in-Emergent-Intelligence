@@ -9,3 +9,4 @@ The codes generate the data for the paper "Complexity Synchronization in Emergen
 5- Run EI_Averages_5 to evaluate the averages of the payoffs.
 6- Run RenewalTest_6 for the renewal experiment. The length of the time series for this experiment should be long. Run the EI_1.m code for NS= 20 and Trials= 1e7. You only need one time series, so set k5 = 1 : 1.
 7- Run EI_Animation_7 to create the corresponding animation.
+For details of the model, read the preprint "CS_in_EI (2023).pdf"
